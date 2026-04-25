@@ -42,28 +42,34 @@ console = Console()
 
 def masked_input(prompt: str) -> str:
     """password input that shows * for each character typed"""
-    print(prompt, end="", flush=True)
-    password = ""
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     try:
         tty.setraw(fd)
+        sys.stdout.write(prompt)
+        sys.stdout.flush()
+        password = ""
         while True:
             ch = sys.stdin.read(1)
             if ch in ("\r", "\n"):
-                print()
+                sys.stdout.write("\n")
+                sys.stdout.flush()
                 break
             elif ch == "\x7f":  # backspace
                 if password:
                     password = password[:-1]
-                    print("\b \b", end="", flush=True)
+                    sys.stdout.write("\b \b")
+                    sys.stdout.flush()
             elif ch == "\x03":  # ctrl+c
+                sys.stdout.write("\n")
+                sys.stdout.flush()
                 raise KeyboardInterrupt
-            else:
+            elif ch >= " ":  # ignore control characters
                 password += ch
-                print("*", end="", flush=True)
+                sys.stdout.write("*")
+                sys.stdout.flush()
     finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+        termios.tcsetattr(fd, termios.TCSANOW, old)
     return password
 
 BANNER = r"""
@@ -153,7 +159,7 @@ def setup_wizard():
     pwd = masked_input("  space-track password: ")
     key  = Prompt.ask("  [white]n2yo api key[/white]")
 
-    new_creds = {"space_track_user": user, "space_track_pass": pwd, "n2yo_key": key}
+    new_creds = {"space_track_user": user.strip(), "space_track_pass": pwd.strip(), "n2yo_key": key.strip()}
     save_creds(new_creds)
     console.print()
     console.print("[bold white]saved to .env[/bold white]")
@@ -166,16 +172,25 @@ def spacetrack_login(user: str, pwd: str) -> requests.Session:
     session = requests.Session()
     resp = session.post(
         f"{SPACETRACK_BASE}/ajaxauth/login",
-        data={"identity": user, "password": pwd},
+        data={"identity": user.strip(), "password": pwd.strip()},
         timeout=15,
     )
     resp.raise_for_status()
-    # verify the session actually works with a lightweight test request
+    # space-track returns {"Login": "Failed"} on bad credentials
+    try:
+        result = resp.json()
+        if isinstance(result, dict) and str(result.get("Login", "")).lower() == "failed":
+            raise ValueError("login failed - check your credentials")
+    except ValueError:
+        raise
+    except Exception:
+        pass
+    # double-check with a real API call
     test = session.get(
         f"{SPACETRACK_BASE}/basicspacedata/query/class/satcat/limit/1/format/json",
         timeout=15,
     )
-    if test.status_code != 200 or "Login" in test.url:
+    if test.status_code != 200 or "login" in test.url.lower():
         raise ValueError("login failed - check your credentials")
     return session
 
