@@ -170,7 +170,12 @@ def spacetrack_login(user: str, pwd: str) -> requests.Session:
         timeout=15,
     )
     resp.raise_for_status()
-    if "Login" in resp.text:
+    # verify the session actually works with a lightweight test request
+    test = session.get(
+        f"{SPACETRACK_BASE}/basicspacedata/query/class/satcat/limit/1/format/json",
+        timeout=15,
+    )
+    if test.status_code != 200 or "Login" in test.url:
         raise ValueError("login failed - check your credentials")
     return session
 
