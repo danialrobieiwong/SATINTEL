@@ -137,8 +137,8 @@ def setup_wizard():
     console.print("[dim white]  -> https://www.space-track.org/auth/createAccount[/dim white]")
     console.print()
     console.print("[white]Step 2 - N2YO (free account + API key)[/white]")
-    console.print("[dim white]  -> https://www.n2yo.com/login/register.php[/dim white]")
-    console.print("[dim white]  -> get your key at: https://www.n2yo.com/login/[/dim white]")
+    console.print("[dim white]  -> register at: https://www.n2yo.com/[/dim white]")
+    console.print("[dim white]  -> get your key at: https://www.n2yo.com/login/edit/[/dim white]")
     console.print()
 
     creds = load_creds()

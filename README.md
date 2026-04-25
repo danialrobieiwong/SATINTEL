@@ -51,7 +51,7 @@ know when to look up
 
 - python 3.8+ — [python.org/downloads](https://www.python.org/downloads/)
 - free [space-track.org](https://www.space-track.org/auth/createAccount) account
-- free [n2yo.com](https://www.n2yo.com/login/register.php) account + API key
+- free [n2yo.com](https://www.n2yo.com/) account + API key
 
 everything else installs itself on first run.
 
@@ -74,7 +74,7 @@ first launch will ask for your API keys and save them to a `.env` file. after th
 
 **space-track** — register at [space-track.org/auth/createAccount](https://www.space-track.org/auth/createAccount), your login is just the email and password you sign up with
 
-**n2yo** — register at [n2yo.com](https://www.n2yo.com/login/register.php), then find your API key on [this page](https://www.n2yo.com/login/) after logging in
+**n2yo** — register at [n2yo.com](https://www.n2yo.com/), then find your API key on [this page](https://www.n2yo.com/login/edit/) after logging in
 
 ---
 
