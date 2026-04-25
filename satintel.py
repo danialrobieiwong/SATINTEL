@@ -24,7 +24,8 @@ def _ensure_packages():
 
 _ensure_packages()
 
-import getpass
+import tty
+import termios
 import requests
 from dotenv import load_dotenv
 from rich.console import Console
@@ -38,6 +39,32 @@ from rich.rule import Rule
 load_dotenv()
 
 console = Console()
+
+def masked_input(prompt: str) -> str:
+    """password input that shows * for each character typed"""
+    print(prompt, end="", flush=True)
+    password = ""
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        while True:
+            ch = sys.stdin.read(1)
+            if ch in ("\r", "\n"):
+                print()
+                break
+            elif ch == "\x7f":  # backspace
+                if password:
+                    password = password[:-1]
+                    print("\b \b", end="", flush=True)
+            elif ch == "\x03":  # ctrl+c
+                raise KeyboardInterrupt
+            else:
+                password += ch
+                print("*", end="", flush=True)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    return password
 
 BANNER = r"""
   *    .  .       *    .        .      *    .     .    .  *
@@ -123,8 +150,7 @@ def setup_wizard():
 
     console.print()
     user = Prompt.ask("  [white]space-track email[/white]")
-    console.print("  [white]space-track password[/white] ", end="")
-    pwd  = getpass.getpass(prompt="")
+    pwd = masked_input("  space-track password: ")
     key  = Prompt.ask("  [white]n2yo api key[/white]")
 
     new_creds = {"space_track_user": user, "space_track_pass": pwd, "n2yo_key": key}
