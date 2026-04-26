@@ -1,4 +1,4 @@
-# SATINTEL
+# SAT-SPEAK
 
 Track satellites from your terminal. Real-time positions, pass predictions, orbital data — all from free APIs.
 
@@ -60,8 +60,8 @@ Everything else installs itself on first run.
 ## How to run it
 
 ```bash
-git clone https://github.com/danialrobieiwong/SATINTEL
-cd SATINTEL
+git clone https://github.com/danialrobieiwong/SAT-SPEAK
+cd SAT-SPEAK
 ./setup.sh
 ./run.sh
 ```

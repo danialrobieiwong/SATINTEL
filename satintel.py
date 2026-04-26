@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SATINTEL - satellite OSINT tool, runs from your terminal
+# SAT-SPEAK - satellite OSINT tool, runs from your terminal
 # needs free API keys from space-track.org and n2yo.com
 
 import os
@@ -18,9 +18,9 @@ def _ensure_packages():
         except ImportError:
             missing.append(pip_name)
     if missing:
-        print(f"\n[SATINTEL] Installing: {', '.join(missing)}")
+        print(f"\n[SAT-SPEAK] Installing: {', '.join(missing)}")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet"] + missing)
-        print("[SATINTEL] Done. Starting...\n")
+        print("[SAT-SPEAK] Done. Starting...\n")
 
 _ensure_packages()
 
@@ -77,12 +77,12 @@ BANNER = r"""
 .       .   .    .  *  .   .         .   .    .       .
    *  .    .   .          .    .   *      .       *       .
 
-   ███████╗ █████╗ ████████╗██╗███╗   ██╗████████╗███████╗██╗
-   ██╔════╝██╔══██╗╚══██╔══╝██║████╗  ██║╚══██╔══╝██╔════╝██║
-   ███████╗███████║   ██║   ██║██╔██╗ ██║   ██║   █████╗  ██║
-   ╚════██║██╔══██║   ██║   ██║██║╚██╗██║   ██║   ██╔══╝  ██║
-   ███████║██║  ██║   ██║   ██║██║ ╚████║   ██║   ███████╗███████╗
-   ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚══════╝
+   ███████╗ █████╗ ████████╗   ███████╗██████╗ ███████╗ █████╗ ██╗  ██╗
+   ██╔════╝██╔══██╗╚══██╔══╝   ██╔════╝██╔══██╗██╔════╝██╔══██╗██║ ██╔╝
+   ███████╗███████║   ██║█████╗███████╗██████╔╝█████╗  ███████║█████╔╝
+   ╚════██║██╔══██║   ██║╚════╝╚════██║██╔═══╝ ██╔══╝  ██╔══██║██╔═██╗
+   ███████║██║  ██║   ██║      ███████║██║     ███████╗██║  ██║██║  ██╗
+   ╚══════╝╚═╝  ╚═╝   ╚═╝      ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
 .       .   .  *  .        .   .         .     *    .     .   .
   .  *     .      .     .    *    .    .          .    .
@@ -137,7 +137,7 @@ def setup_wizard():
     console.print()
     console.print(Rule("[bold white]FIRST-TIME SETUP[/bold white]", style="white"))
     console.print()
-    console.print("[white]SATINTEL needs API keys to pull satellite data.[/white]")
+    console.print("[white]SAT-SPEAK needs API keys to pull satellite data.[/white]")
     console.print()
     console.print("[white]Step 1 - Space-Track (free account)[/white]")
     console.print("[dim white]  -> https://www.space-track.org/auth/createAccount[/dim white]")
@@ -706,7 +706,7 @@ def feature_tle_parser():
 
 MENU = r"""
   +---------------------------------------------------------+
-  |                      SATINTEL                           |
+  |                      SAT-SPEAK                           |
   |                                                         |
   |  [1]  orbital element data  - TLE & catalog lookup      |
   |  [2]  satellite position    - real-time lat/lon/alt     |
